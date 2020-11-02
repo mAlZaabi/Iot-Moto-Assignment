@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<!--Title-->
+<title>Interactive Map</title>
+
+<style>
+.mq-ribbon-popup 
+.leaflet-popup-tip-container{display: none;} 
+
+.mq-ribbon-popup 
+.leaflet-popup-content-wrapper{border-radius:6px;} 
+
+.mq-ribbon-popup 
+.leaflet-popup-content-wrapper 
+.leaflet-popup-content{margin:3px 6px;font-size:11px;}
+
+.mq-logo-control{margin-left: 2px !important;margin-bottom: 5px !important;}
+.mq-logo-control img{ position: relative;}
+
+.leaflet-bottom.leaflet-right 
+.mq-attribution-control{
+background:#eaeaea;
+bottom:-2px;
+color:#777777;
+height:13px;
+margin:0;
+padding:0px 5px;
+text-align:right;
+text-transform:uppercase;
+font-weight:normal;
+font-family:sans-serif;
+font-size:9px;
+white-space:nowrap;
+margin-bottom:2px;
+letter-spacing:.5px;} 
+
+.leaflet-bottom.leaflet-right 
+.mq-attribution-control 
+a{color:inherit;font-weight:700;text-decoration:underline;}
+
+#map{
+position: fixed;
+width:100%;
+height:100%;
+}
+
+body{
+border: 0;
+margin: 0;
+}
+</style>
+
+<!--Resources-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css">
+<link rel="stylesheet" href="\..\css\map-style.css">
+
+<!--Scripts-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+<script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=xLbF5CyvcihHZZpBxvthjlPkkSvpmSTz "></script>
+<script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-routing.js?key=xLbF5CyvcihHZZpBxvthjlPkkSvpmSTz "></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type= "text/javascript" src="\..\javascript\map-script.js"></script>
+</head>
+<!--Body-->
+<body>
+<!--Map-->
+<div id='map'></div> 
+<script>
+window.onload = function() {
+    L.key = 'xLbF5CyvcihHZZpBxvthjlPkkSvpmSTz';
+    var map;
+    var dir;
+
+    map = L.map('map', {
+        layers: MQ.mapLayer(),
+        center: [ 25.404159, 55.480777 ],
+        zoom: 15
+    });
+
+    var startMarker = L.marker([25.404159, 55.480777]).addTo(map);
+        startMarker.bindPopup("Start Marker").openPopup();
+
+    var destinationMarker = L.marker([25.405710, 55.472297]).addTo(map);
+        destinationMarker.bindPopup("Destination Marker").openPopup();
+
+    dir = MQ.routing.directions();
+    route = MQ.routing.routeLayer({
+            directions: dir,
+            fitBounds: true
+    });
+
+    map.addLayer(route);
+
+    dir.route({
+        maxRoutes: 0,
+        locations: [
+        { latLng: { lat : startMarker.getLatLng().lat, lng: startMarker.getLatLng().lng}},
+        { latLng: { lat :destinationMarker.getLatLng().lat, lng: destinationMarker.getLatLng().lng}}
+        ]
+
+        });
+
+    function onMapClick(e){
+        destinationMarker.setLatLng(e.latlng);
+        destinationMarker.bindPopup("Destination Marker").openPopup();
+
+        map.removeLayer(route);
+
+        map.addLayer(route);
+        dir.route({
+        locations: [
+        { latLng: { lat : startMarker.getLatLng().lat, lng: startMarker.getLatLng().lng}},
+        { latLng: { lat :destinationMarker.getLatLng().lat, lng: destinationMarker.getLatLng().lng}}
+        ]
+
+        });
+        
+    }
+
+    map.on('click',onMapClick);
+};
+ 
+
+
+
+utf8utf8utf8utf8
+</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<!--title-->
+<title>Moto Device</title>
+<!--Resources-->
+<style>
+#canvasDiv{
+width:750px;
+height:750px;
+}
+</style>
+
+<!--Scripts-->
+
+</head>
+
+<!--body-->
+<body>
+
+<div id="canvasDiv">
+<canvas id="myCanvas" width="750" height="750">
+Your browser does not support the HTML canvas tag.
+</canvas>
+</div>
+<script>
+function drawCircle(){
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.beginPath();
+ctx.arc(375, 375, 160, 0, 2 * Math.PI);
+ctx.fill();
+ctx.stroke();
+}
+
+function drawArrow(){
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.beginPath();
+ctx.moveTo(300,440);
+ctx.lineTo(375,300);
+ctx.lineTo(450,440);
+ctx.strokeStyle = "#ffffff";
+ctx.lineWidth =  "10";
+ctx.stroke();
+}
+
+function rotateCanvas(){
+var start = {x: 0, y: 25};
+var end = {x: 0, y: 0};
+var rise = end.y - start.y;
+var run = end.x - start.x;
+var angle = ( (180 / Math.PI) * Math.atan(rise / run));
+if(rise < 0 && run < 0)
+angle = angle - 90;
+else if(rise >= 0 && run < 0)
+angle = angle + 270;
+else if (rise < 0 && run >= 0)
+angle = angle + 90;
+else angle = angle - 270;
+
+document.getElementById("canvasDiv").style.transform = 'rotate(' + angle +'deg)';
+}
+
+addEventListener('load',[drawCircle(),drawArrow(),rotateCanvas()]); 
+ 
+</script>
+</body>
+</html>
